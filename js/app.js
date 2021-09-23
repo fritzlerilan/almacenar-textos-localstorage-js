@@ -35,7 +35,7 @@ function agregarTweet(e) {
         tweet,
     }
     tweets = [...tweets, tweetObj];
-    
+
     // Se sobre-escribe el LocalStorage
     mostrarTweets();
     // Se limpia el valor del formulario
@@ -66,11 +66,28 @@ function mostrarTweets() {
     limpiarTweets();
 
     tweets.forEach(t => {
+        // Boton de eliminar
+        const btnEliminar = document.createElement('a');
+        btnEliminar.classList.add('borrar-tweet');
+        btnEliminar.innerText = 'X';
+
+        // Añadir funcionalidad para eliminar
+        btnEliminar.onclick = () => {
+            borrarTweet(t.id);
+        }
+
         const li = document.createElement('li');
         li.textContent = t.tweet;
+        li.appendChild(btnEliminar);
         listaTweets.appendChild(li);
     })
     sincronizarStorage();
+}
+
+// Elimina un tweet 
+function borrarTweet(id) {
+    tweets = tweets.filter(tweet => tweet.id !== id);
+    mostrarTweets();
 }
 
 function limpiarTweets() {
