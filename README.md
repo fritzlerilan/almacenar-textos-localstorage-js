@@ -9,4 +9,4 @@ Este proyecto es parte del curso [JavaScript Moderno Guía Definitiva Construye 
  - 💼 LocalStorage
 
 ### Netlify 🌐
-🚧🚧
+[tweets-todo-list-fritzlerilan.netlify.app](https://tweets-todo-list-fritzlerilan.netlify.app)
