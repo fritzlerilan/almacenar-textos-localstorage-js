@@ -4,16 +4,16 @@ let tweets = [];
 
 eventListeners();
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Toma los valores del local storage y los guarda en una variable que podamos leer y mostrar en el DOM
 
-    const almacenados = localStorage.getItem('tweets');
-    tweets = almacenados ? [...JSON.parse(almacenados)] : tweets;
-    mostrarTweets();
-})
 
 function eventListeners() {
     formulario.addEventListener('submit', agregarTweet);
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Toma los valores del local storage y los guarda en una variable que podamos leer y mostrar en el DOM
+        tweets = JSON.parse(localStorage.getItem('tweets')) || tweets;
+        mostrarTweets();
+    })
 }
 
 
@@ -37,11 +37,13 @@ function agregarTweet(e) {
     tweets = [...tweets, tweetObj];
     
     // Se sobre-escribe el LocalStorage
-    localStorage.setItem('tweets', JSON.stringify(tweets));
     mostrarTweets();
-
     // Se limpia el valor del formulario
     tweetElement.value = '';
+}
+
+function sincronizarStorage() {
+    localStorage.setItem('tweets', JSON.stringify(tweets));
 }
 
 function mostrarError(error) {
@@ -68,6 +70,7 @@ function mostrarTweets() {
         li.textContent = t.tweet;
         listaTweets.appendChild(li);
     })
+    sincronizarStorage();
 }
 
 function limpiarTweets() {
