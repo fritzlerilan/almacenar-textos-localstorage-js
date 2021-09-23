@@ -6,9 +6,9 @@ eventListeners();
 
 document.addEventListener('DOMContentLoaded', () => {
     // Toma los valores del local storage y los guarda en una variable que podamos leer y mostrar en el DOM
-    
+
     const almacenados = localStorage.getItem('tweets');
-    tweets = almacenados ? JSON.parse(almacenados) : [];
+    tweets = almacenados ? [...JSON.parse(almacenados)] : tweets;
     mostrarTweets();
 })
 
@@ -21,23 +21,31 @@ function eventListeners() {
 function agregarTweet(e) {
     e.preventDefault();
     // Text area donde el usuario escribe
-    const tweet = document.querySelector('#tweet');
+    const tweetElement = document.querySelector('#tweet');
+    const tweet = tweetElement.value
 
     // Validacion
-    if ( tweet.value === '') {
+    if (tweet === '') {
         mostrarError('Un mensaje no puede ir vacio');
         return; // Evita que se ejecuten mas lineas de código.
-    } 
-    tweets.push(tweet.value);
-    // Se limpia el valor del formulario
-    tweet.value = '';
+    }
+
+    const tweetObj = {
+        id: Date.now(),
+        tweet,
+    }
+    tweets = [...tweets, tweetObj];
+    
     // Se sobre-escribe el LocalStorage
     localStorage.setItem('tweets', JSON.stringify(tweets));
     mostrarTweets();
+
+    // Se limpia el valor del formulario
+    tweetElement.value = '';
 }
 
 function mostrarError(error) {
-    
+
     const mensajeError = document.createElement('p');
     mensajeError.textContent = error;
     mensajeError.classList.add('error');
@@ -48,13 +56,7 @@ function mostrarError(error) {
 
     setTimeout(() => {
         mensajeError.remove();
-    }, 1500);
-}
-function limpiarErrores() {
-    const errores = document.querySelectorAll('.error');
-    errores.forEach(e => {
-        e.remove();
-    })
+    }, 2000);
 }
 
 function mostrarTweets() {
@@ -62,9 +64,9 @@ function mostrarTweets() {
     limpiarTweets();
 
     tweets.forEach(t => {
-        const newTweet = document.createElement('div');
-        newTweet.textContent = t;
-        listaTweets.appendChild(newTweet);
+        const li = document.createElement('li');
+        li.textContent = t.tweet;
+        listaTweets.appendChild(li);
     })
 }
 
